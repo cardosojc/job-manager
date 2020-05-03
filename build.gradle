@@ -1,0 +1,84 @@
+plugins {
+  id 'java'
+  id 'application'
+  id 'com.github.johnrengelman.shadow' version '5.0.0'
+  id 'io.dotinc.vertx-codegen-plugin' version '0.0.1'
+  id 'io.freefair.lombok' version '4.1.4'
+}
+
+group = 'io.carpe'
+version = '1.0.0-SNAPSHOT'
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  jcenter()
+}
+
+ext {
+  vertxVersion = '3.9.0'
+  junitJupiterEngineVersion = '5.4.0'
+  lombokVersion = '1.18.12'
+}
+
+application {
+  mainClassName = 'io.vertx.core.Launcher'
+}
+
+sourceCompatibility = '12'
+
+def mainVerticleName = 'io.carpe.job.MainVerticle'
+def watchForChange = 'src/**/*'
+def doOnChange = './gradlew classes'
+
+// --- Lombok
+generateLombokConfig.enabled = false
+
+dependencies {
+  annotationProcessor "io.vertx:vertx-codegen:$vertxVersion:processor"
+  annotationProcessor "io.vertx:vertx-service-proxy:$vertxVersion:processor"
+  annotationProcessor "io.vertx:vertx-web-api-service:$vertxVersion"
+
+  implementation "io.vertx:vertx-micrometer-metrics:$vertxVersion"
+  implementation "io.vertx:vertx-rx-java2:$vertxVersion"
+  implementation "io.vertx:vertx-web:$vertxVersion"
+  implementation "io.vertx:vertx-web-api-service:$vertxVersion"
+  implementation "io.vertx:vertx-service-proxy:$vertxVersion"
+  implementation "io.vertx:vertx-codegen:$vertxVersion"
+  implementation "io.vertx:vertx-pg-client:$vertxVersion"
+  implementation "io.vertx:vertx-health-check:$vertxVersion"
+
+  testImplementation "io.vertx:vertx-junit5:$vertxVersion"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion"
+}
+
+
+shadowJar {
+  classifier = 'fat'
+  manifest {
+    attributes 'Main-Verticle': mainVerticleName
+  }
+  mergeServiceFiles {
+    include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+  }
+}
+
+sourceSets {
+  main {
+    java {
+      srcDirs += 'src/main/generated'
+    }
+  }
+}
+
+test {
+  useJUnitPlatform()
+  testLogging {
+    events 'PASSED', 'FAILED', 'SKIPPED'
+  }
+}
+
+run {
+  args = ['run', mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
+}

@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  description: 'RESTful API for Carpe Job Manager'
+  version: '1.0'
+  title: Carpe - Job Manager
+  contact:
+    name: José Cardoso
+    email: jose.cs.cardoso@gmail.com
+tags:
+  - name: Job
+paths:
+  "/job/{code}:findAll":
+    get:
+      operationId: getAllJobEvents
+      x-vertx-event-bus: job.queue
+      summary: Gets a list of a job events in the system
+      tags:
+        - Job
+      parameters:
+        - in: path
+          name: code
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Job'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      deprecated: false
+
+  "/job:register":
+    post:
+      operationId: registerJob
+      x-vertx-event-bus: job.queue
+      summary: Regists a job
+      tags:
+        - Job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobRegisterRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobRegisterResponse'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      deprecated: false
+components:
+  schemas:
+    Job:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        description:
+          type: string
+        state:
+          type: string
+    JobRegisterResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        creationDate:
+          type: string
+          format: timestamp
+    JobRegisterRequest:
+      type: object
+      properties:
+        description:
+          type: string
+        code:
+          type: string
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobStep'
+    JobStep:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+

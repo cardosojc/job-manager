@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  carpe_db:
+    image: postgres:latest
+    container_name: carpe_db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=carpe_job
+      - POSTGRES_USER=carpe
+      - POSTGRES_PASSWORD=carpe
