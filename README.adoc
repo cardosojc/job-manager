@@ -13,10 +13,11 @@ image::docs/arch.jpg[]
 === Datamodel
 image::docs/data_model.png[]
 
-===
+=== Run
 ```
 docker-compose up
 run schema.sql and states.sql using some database.client
 ./gradlew run
 ```
+At this moment only register functionality is implemented
 
