@@ -10,7 +10,7 @@ The idea is to have a job manager that is able to process jobs in a modular way,
 To make a new job available, we just need to develop a verticle with the logic for all the steps and register it using the rest api.
 
 === Architeture
-image::arch.jpg[]
+image::docs/arch.jpg[]
 === Datamodel
 
 ===
