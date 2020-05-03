@@ -2,8 +2,6 @@
 
 image:https://img.shields.io/badge/vert.x-3.9.0-purple.svg[link="https://vertx.io"]
 
-This application was generated using http://start.vertx.io
-
 == General notes
 
 The idea is to have a job manager that is able to process jobs in a modular way, using vert.x.
@@ -11,11 +9,14 @@ To make a new job available, we just need to develop a verticle with the logic f
 
 === Architeture
 image::docs/arch.jpg[]
+
 === Datamodel
+image::docs/data_model.png[]
 
 ===
 ```
 docker-compose up
+run schema.sql and states.sql using some database.client
 ./gradlew run
 ```
 
