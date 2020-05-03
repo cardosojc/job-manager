@@ -4,28 +4,18 @@ image:https://img.shields.io/badge/vert.x-3.9.0-purple.svg[link="https://vertx.i
 
 This application was generated using http://start.vertx.io
 
-== Building
+== General notes
 
-To launch your tests:
-```
-./gradlew clean test
-```
+The idea is to have a job manager that is able to process jobs in a modular way, using vert.x.
+To make a new job available, we just need to develop a verticle with the logic for all the steps and register it using the rest api.
 
-To package your application:
-```
-./gradlew clean assemble
-```
+=== Architeture
+image::arch.jpg[]
+=== Datamodel
 
-To run your application:
+===
 ```
-./gradlew clean run
+docker-compose up
+./gradlew run
 ```
-
-== Help
-
-* https://vertx.io/docs/[Vert.x Documentation]
-* https://stackoverflow.com/questions/tagged/vert.x?sort=newest&pageSize=15[Vert.x Stack Overflow]
-* https://groups.google.com/forum/?fromgroups#!forum/vertx[Vert.x User Group]
-* https://gitter.im/eclipse-vertx/vertx-users[Vert.x Gitter]
-
 
